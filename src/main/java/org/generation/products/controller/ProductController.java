@@ -16,13 +16,29 @@ public class ProductController {
         this.productService = productService;
     }
 
+    //Metodo GET para visualizar todos los productos
     @GetMapping
     public List<Product> getAllProducts() {
         return productService.getAllProducts();
     }
 
-    @PostMapping
+    //Metodo POST para crear un nuevo producto
+    @PostMapping("/new")
     public Product saveProduct(@RequestBody Product product) {
         return productService.saveProduct(product);
     }
+
+    //Metodo PUT para modificar todo un producto
+//    @PutMapping
+
+
+    //Metodo DELETE para eliminar producto
+    @DeleteMapping("/delete/{id}")
+    public void deleteProduct(@PathVariable Long id) {
+        if (!productService.verifyId(id)) {
+            throw new RuntimeException("Id: " + id + " no encontrado");
+        }
+        productService.deleteProduct(id);
+    }
+
 }
