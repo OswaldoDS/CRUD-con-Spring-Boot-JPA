@@ -41,7 +41,13 @@ public class ProductController {
     }
 
     //Metodo PUT para modificar todo un producto
-//    @PutMapping
+    @PutMapping("/edit/{id}")
+    public Product getEditProduct(@RequestBody Product product, @PathVariable Long id) {
+        if (!productService.verifyId(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id: " + id + " no encontrado");
+        }
+        return productService.saveProduct(product);
+    }
 
 
     //Metodo DELETE para eliminar producto
