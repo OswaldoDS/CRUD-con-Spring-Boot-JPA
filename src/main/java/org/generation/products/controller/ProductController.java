@@ -36,13 +36,13 @@ public class ProductController {
 
     //Metodo POST para crear un nuevo producto
     @PostMapping("/new")
-    public Product saveProduct(@RequestBody Product product) {
+    public Product postSaveProduct(@RequestBody Product product) {
         return productService.saveProduct(product);
     }
 
     //Metodo PUT para modificar todo un producto
     @PutMapping("/edit/{id}")
-    public Product getEditProduct(@RequestBody Product product, @PathVariable Long id) {
+    public Product putEditProduct(@RequestBody Product product, @PathVariable Long id) {
         if (!productService.verifyId(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id: " + id + " no encontrado");
         }
@@ -52,13 +52,13 @@ public class ProductController {
 
     //Metodo DELETE para eliminar producto
     @DeleteMapping("/delete/{id}")
-    public void deleteProduct(@PathVariable Long id) {
+    public String deleteProduct(@PathVariable Long id) {
         if (!productService.verifyId(id)) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id: " + id + " no encontrado");
+            return "Id: " + id + " no encontrado!";
         } else {
             productService.deleteProduct(id);
+            return "Id: " + id + " eliminado con éxito!";
         }
-
     }
 
 }
