@@ -2,9 +2,12 @@ package org.generation.products.controller;
 
 import org.generation.products.model.Product;
 import org.generation.products.service.ProductService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -22,6 +25,15 @@ public class ProductController {
         return productService.getAllProducts();
     }
 
+    //Metodo GET para visualizar un producto por Id
+    @GetMapping("/{id}")
+    public Optional<Product> getProductById(@PathVariable Long id) {
+        if (!productService.verifyId(id)) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id: " + id + " no encontrado");
+        }
+        return productService.getProductById(id);
+    }
+
     //Metodo POST para crear un nuevo producto
     @PostMapping("/new")
     public Product saveProduct(@RequestBody Product product) {
@@ -36,9 +48,11 @@ public class ProductController {
     @DeleteMapping("/delete/{id}")
     public void deleteProduct(@PathVariable Long id) {
         if (!productService.verifyId(id)) {
-            throw new RuntimeException("Id: " + id + " no encontrado");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Id: " + id + " no encontrado");
+        } else {
+            productService.deleteProduct(id);
         }
-        productService.deleteProduct(id);
+
     }
 
 }
